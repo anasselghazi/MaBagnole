@@ -12,9 +12,10 @@ CREATE TABLE clients (
     id_client  INT PRIMARY KEY AUTO_INCREMENT,
     nom VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    mot_de_passe_hash VARCHAR(255) NOT NULL,
+    mot_passe_hash VARCHAR(255) NOT NULL,
     telephone VARCHAR(20),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    role ENUM ('admin','client') DEFAULT 'client'
 );
 
 CREATE TABLE vehicules (

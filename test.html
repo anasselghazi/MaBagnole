@@ -1,155 +1,186 @@
  <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MaBagnole Admin Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DriveNow | Car Rental</title>
 
-<!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- FontAwesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <style>
-.fade-in{animation:fade 0.3s ease-in-out}
-@keyframes fade{
-    from{opacity:0;transform:translateY(10px)}
-    to{opacity:1;transform:translateY(0)}
+body {
+  background: radial-gradient(circle at top, #0f172a, #020617);
+}
+@keyframes scale {
+  from { transform: scale(.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.animate-scale {
+  animation: scale .3s ease-out;
 }
 </style>
 </head>
 
-<body class="bg-gray-100">
+<body class="text-white">
 
-<!-- SIDEBAR -->
-<div id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg">
-    <div class="p-4 text-xl font-bold text-blue-600 border-b">🚗 MaBagnole</div>
-    <nav class="p-4 space-y-2">
-        <button onclick="showSection('dashboard')" class="w-full text-left p-2 hover:bg-blue-100 rounded">Dashboard</button>
-        <button onclick="showSection('vehicules')" class="w-full text-left p-2 hover:bg-blue-100 rounded">Véhicules</button>
-        <button onclick="showSection('categories')" class="w-full text-left p-2 hover:bg-blue-100 rounded">Catégories</button>
-        <button onclick="showSection('reservations')" class="w-full text-left p-2 hover:bg-blue-100 rounded">Réservations</button>
-        <button onclick="showSection('avis')" class="w-full text-left p-2 hover:bg-blue-100 rounded">Avis</button>
-    </nav>
-</div>
+<nav class="fixed top-0 w-full z-50 backdrop-blur bg-white/10 border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <h1 class="text-2xl font-black">🚗 Drive<span class="text-blue-400">Now</span></h1>
 
-<!-- CONTENT -->
-<div class="ml-64 p-6">
-
-<h1 id="title" class="text-2xl font-bold mb-6">Dashboard</h1>
-
-<!-- DASHBOARD -->
-<section id="dashboard" class="fade-in">
-    <div class="grid grid-cols-4 gap-4">
-        <div class="bg-white p-4 rounded shadow">🚗 Véhicules : <b>12</b></div>
-        <div class="bg-white p-4 rounded shadow">📅 Réservations : <b>5</b></div>
-        <div class="bg-white p-4 rounded shadow">⭐ Avis : <b>20</b></div>
-        <div class="bg-white p-4 rounded shadow">👤 Clients : <b>8</b></div>
+    <div class="hidden md:flex gap-8">
+      <a href="#" class="hover:text-blue-400">Home</a>
+      <a href="#" class="hover:text-blue-400">Cars</a>
+      <a href="#" class="hover:text-blue-400">Contact</a>
     </div>
-</section>
 
-<!-- VEHICULES -->
-<section id="vehicules" class="hidden fade-in">
-    <div class="flex justify-between mb-4">
-        <h2 class="text-xl font-bold">Véhicules</h2>
-        <button onclick="openModal('vehiculeModal')" class="bg-blue-600 text-white px-4 py-2 rounded">
-            + Ajouter
+    <button onclick="openAuth()" class="bg-blue-500 px-5 py-2 rounded-full hover:bg-blue-600 transition">
+      Sign In
+    </button>
+  </div>
+</nav>
+
+<section class="min-h-screen flex items-center pt-32">
+  <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+
+    <div>
+      <h2 class="text-5xl md:text-6xl font-black leading-tight">
+        Rent the <span class="text-blue-400">Future</span><br>Drive with Style
+      </h2>
+      <p class="mt-6 text-gray-300">
+        Premium car rental service with modern & luxury vehicles.
+      </p>
+
+      <div class="mt-10 flex gap-4">
+        <button class="bg-blue-500 px-8 py-4 rounded-full hover:bg-blue-600 transition">
+          Explore Cars
         </button>
-    </div>
-
-    <table class="w-full bg-white rounded shadow">
-        <tr class="border-b">
-            <th class="p-2">Modèle</th>
-            <th>Prix</th>
-            <th>Action</th>
-        </tr>
-        <tr>
-            <td class="p-2">Peugeot 208</td>
-            <td>45€</td>
-            <td>
-                <button onclick="confirmDelete()" class="text-red-600">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
-        </tr>
-    </table>
-</section>
-
-<!-- CATEGORIES -->
-<section id="categories" class="hidden fade-in">
-    <h2 class="text-xl font-bold mb-4">Catégories</h2>
-    <div class="bg-white p-4 rounded shadow">
-        Citadine
-    </div>
-</section>
-
-<!-- RESERVATIONS -->
-<section id="reservations" class="hidden fade-in">
-    <h2 class="text-xl font-bold mb-4">Réservations</h2>
-    <div class="bg-white p-4 rounded shadow">
-        Jean Dupont - Peugeot 208
-        <button onclick="openModal('reservationModal')" class="text-blue-600 ml-4">
-            Voir
+        <button class="border border-white/30 px-8 py-4 rounded-full hover:bg-white/10 transition">
+          How it works
         </button>
+      </div>
     </div>
+
+    <div class="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl p-8 shadow-2xl">
+      <h3 class="text-xl font-bold mb-6">Quick Booking</h3>
+      <input class="w-full mb-4 bg-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500" placeholder="City">
+      <input type="date" class="w-full mb-4 bg-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500">
+      <button class="w-full bg-blue-500 py-4 rounded-xl hover:bg-blue-600 transition font-bold">
+        Search Car
+      </button>
+    </div>
+
+  </div>
 </section>
 
-<!-- AVIS -->
-<section id="avis" class="hidden fade-in">
-    <h2 class="text-xl font-bold mb-4">Avis Clients</h2>
-    <div class="bg-white p-4 rounded shadow">
-        ⭐⭐⭐⭐⭐ Très bon service
-    </div>
-</section>
+<section class="py-32">
+  <div class="max-w-7xl mx-auto px-6">
+    <h3 class="text-center text-4xl font-black mb-16">
+      Our <span class="text-blue-400">Fleet</span>
+    </h3>
 
-</div>
-
-<!-- MODAL VEHICULE -->
-<div id="vehiculeModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white p-6 rounded w-96">
-        <h3 class="text-xl font-bold mb-4">Ajouter Véhicule</h3>
-        <input class="border p-2 w-full mb-2" placeholder="Modèle">
-        <input class="border p-2 w-full mb-2" placeholder="Prix">
-        <div class="flex justify-end space-x-2">
-            <button onclick="closeModal('vehiculeModal')" class="px-4 py-2">Annuler</button>
-            <button class="bg-blue-600 text-white px-4 py-2 rounded">Ajouter</button>
+    <div class="grid md:grid-cols-3 gap-12">
+      <div class="bg-white/5 backdrop-blur border border-white/10 rounded-3xl overflow-hidden hover:scale-105 transition duration-300">
+        <img src="https://images.unsplash.com/photo-1619767886558-efdc7b9b4d9c" class="h-52 w-full object-cover">
+        <div class="p-6">
+          <h4 class="text-2xl font-bold">BMW M4</h4>
+          <p class="text-gray-400">Automatic • Petrol</p>
+          <div class="flex justify-between mt-6">
+            <span class="text-blue-400 font-bold text-xl">120€ / day</span>
+            <button class="bg-blue-500 px-4 py-2 rounded-full hover:bg-blue-600">Rent</button>
+          </div>
         </div>
-    </div>
-</div>
+      </div>
 
-<!-- MODAL RESERVATION -->
-<div id="reservationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white p-6 rounded w-96">
-        <h3 class="text-xl font-bold mb-2">Détails Réservation</h3>
-        <p>Client : Jean Dupont</p>
-        <p>Véhicule : Peugeot 208</p>
-        <button onclick="closeModal('reservationModal')" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded">
-            Fermer
+      <div class="bg-white/5 backdrop-blur border border-white/10 rounded-3xl overflow-hidden hover:scale-105 transition duration-300">
+        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70" class="h-52 w-full object-cover">
+        <div class="p-6">
+          <h4 class="text-2xl font-bold">Mercedes C-Class</h4>
+          <p class="text-gray-400">Automatic • Diesel</p>
+          <div class="flex justify-between mt-6">
+            <span class="text-blue-400 font-bold text-xl">95€ / day</span>
+            <button class="bg-blue-500 px-4 py-2 rounded-full hover:bg-blue-600">Rent</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white/5 backdrop-blur border border-white/10 rounded-3xl overflow-hidden hover:scale-105 transition duration-300">
+        <img src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2" class="h-52 w-full object-cover">
+        <div class="p-6">
+          <h4 class="text-2xl font-bold">Tesla Model 3</h4>
+          <p class="text-gray-400">Electric</p>
+          <div class="flex justify-between mt-6">
+            <span class="text-blue-400 font-bold text-xl">110€ / day</span>
+            <button class="bg-blue-500 px-4 py-2 rounded-full hover:bg-blue-600">Rent</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="authModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-[999] backdrop-blur-sm">
+  <div class="relative w-[90%] max-w-md backdrop-blur-2xl bg-white/10 border border-white/20 rounded-3xl p-10 animate-scale shadow-2xl">
+
+    <button onclick="closeAuth()" class="absolute top-5 right-5 text-gray-400 hover:text-white transition text-2xl">✕</button>
+
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-black mb-2">Welcome Back</h2>
+      <p class="text-gray-400">Login to your account to continue</p>
+    </div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-400 mb-1 ml-1">Email Address</label>
+          <input type="email" required class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500 transition" placeholder="name@example.com">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-400 mb-1 ml-1">Password</label>
+          <input type="password" required class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500 transition" placeholder="••••••••">
+        </div>
+
+        <div class="flex justify-end">
+          <a href="#" class="text-sm text-blue-400 hover:underline">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="w-full bg-blue-500 py-4 rounded-xl font-bold hover:bg-blue-600 transition shadow-lg shadow-blue-500/20">
+          Sign In
         </button>
-    </div>
+      </div>
+    </form>
+
+    <p class="mt-8 text-center text-gray-400 text-sm">
+      Don't have an account? <a href="#" class="text-blue-400 font-bold hover:underline">Contact us</a>
+    </p>
+
+  </div>
 </div>
 
-<!-- JS -->
 <script>
-function showSection(id){
-    document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
-    document.getElementById(id).classList.remove("hidden");
-    document.getElementById("title").innerText =
-        id.charAt(0).toUpperCase() + id.slice(1);
+const modal = document.getElementById("authModal");
+
+function openAuth() {
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
 }
 
-function openModal(id){
-    document.getElementById(id).classList.remove("hidden");
+function closeAuth() {
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
 }
-function closeModal(id){
-    document.getElementById(id).classList.add("hidden");
+
+// Handle Form Submission
+function handleLogin(event) {
+  event.preventDefault();
+  alert("Login attempt submitted!");
+  // Add your authentication logic here
 }
-function confirmDelete(){
-    if(confirm("Supprimer cet élément ?")){
-        alert("Supprimé (demo)");
-    }
-}
+
+// Close modal when clicking on the dark background
+modal.addEventListener("click", e => {
+  if (e.target === modal) closeAuth();
+});
 </script>
 
 </body>

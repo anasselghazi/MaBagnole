@@ -67,4 +67,13 @@ class Vehicule {
     {
          $this->id_categorie = $id_cat; 
     }
+
+
+    public static function getAllVehicules($pdo) {
+        $sql = "SELECT v.*, c.nom_categorie 
+            FROM vehicules v 
+            INNER JOIN categories c ON v.id_categorie = c.id_categorie";
+        $stmt = $pdo->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 }
