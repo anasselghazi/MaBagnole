@@ -1,3 +1,14 @@
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -142,12 +153,22 @@ body {
       <button class="w-full bg-blue-500 py-4 rounded-xl">Login</button>
     </div>
 
-    <div id="signupForm" class="hidden">
-      <input class="w-full mb-4 bg-white/10 p-4 rounded-xl" placeholder="Full Name">
-      <input class="w-full mb-4 bg-white/10 p-4 rounded-xl" placeholder="Email">
-      <input type="password" class="w-full mb-6 bg-white/10 p-4 rounded-xl" placeholder="Password">
-      <button class="w-full bg-blue-500 py-4 rounded-xl">Create Account</button>
-    </div>
+    <div id="loginForm">
+    <form action="connexion.php" method="POST">
+        <input type="email" name="email" required
+               class="w-full mb-4 bg-white/10 p-4 rounded-xl border border-white/10 focus:border-blue-500 outline-none" 
+               placeholder="Email">
+        
+        <input type="password" name="password" required
+               class="w-full mb-6 bg-white/10 p-4 rounded-xl border border-white/10 focus:border-blue-500 outline-none" 
+               placeholder="Password">
+        
+        <button type="submit" name="submit_login" 
+                class="w-full bg-blue-500 py-4 rounded-xl hover:bg-blue-600 transition font-bold">
+            Login
+        </button>
+    </form>
+</div>
 
   </div>
 </div>

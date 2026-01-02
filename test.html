@@ -1,389 +1,156 @@
  <!DOCTYPE html>
-<html lang="fr" class="dark">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Client - MaBagnole</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: { 
-                extend: { 
-                    animation: { 'fadeIn': 'fadeIn 0.4s ease-out', 'slideIn': 'slideIn 0.3s ease-out' }
-                } 
-            }
-        }
-    </script>
-    <style>
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
-        .fade-in { animation: fadeIn 0.4s ease-out; }
-        .slide-in { animation: slideIn 0.3s ease-out; }
-        .glass { 
-            background: rgba(255, 255, 255, 0.25); 
-            backdrop-filter: blur(10px); 
-            border: 1px solid rgba(255, 255, 255, 0.18);
-        }
-        .dark .glass { 
-            background: rgba(31, 41, 55, 0.75); 
-            border: 1px solid rgba(75, 85, 99, 0.3);
-        }
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-    </style>
+<meta charset="UTF-8">
+<title>MaBagnole Admin Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+.fade-in{animation:fade 0.3s ease-in-out}
+@keyframes fade{
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1;transform:translateY(0)}
+}
+</style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 via-white to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-950 min-h-screen transition-colors duration-300">
-    <!-- Header (comme avant) -->
-    <header class="gradient-bg text-white shadow-2xl">
-        <div class="max-w-7xl mx-auto px-6 py-8">
-            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-                <div>
-                    <h1 class="text-4xl lg:text-5xl font-bold mb-2">Bienvenue, Jean !</h1>
-                    <p class="text-xl opacity-90">Gérez vos réservations et découvrez nos offres</p>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <button onclick="toggleDarkMode()" id="dark-toggle" class="p-3 glass rounded-2xl hover:bg-white/30 dark:hover:bg-gray-700/50 transition-all duration-300 backdrop-blur-sm">
-                        <i class="fas fa-moon text-xl dark:hidden"></i>
-                        <i class="fas fa-sun text-xl hidden dark:block"></i>
-                    </button>
-                    <div class="w-14 h-14 glass rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                        <i class="fas fa-user text-2xl"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
 
-    <div class="max-w-7xl mx-auto px-6 py-12">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <!-- Sidebar (comme avant) -->
-            <div class="lg:col-span-1 space-y-4">
-                <div class="glass rounded-3xl p-8 shadow-xl sticky top-6 transition-all duration-300 backdrop-blur-xl">
-                    <nav class="space-y-4">
-                        <a href="#reservations" onclick="showClientSection('reservations')" class="client-nav flex items-center p-4 rounded-2xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/80 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-all duration-300">
-                            <i class="fas fa-calendar-check w-6 mr-4"></i> Mes Réservations
-                        </a>
-                        <a href="#recherche" onclick="showClientSection('recherche')" class="client-nav flex items-center p-4 rounded-2xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/80 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-all duration-300">
-                            <i class="fas fa-search w-6 mr-4"></i> Recherche Véhicules
-                        </a>
-                        <a href="#avis" onclick="showClientSection('avis')" class="client-nav flex items-center p-4 rounded-2xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/80 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-all duration-300">
-                            <i class="fas fa-star w-6 mr-4"></i> Mes Avis
-                        </a>
-                    </nav>
-                </div>
-            </div>
+<body class="bg-gray-100">
 
-            <!-- Contenu Principal -->
-            <div class="lg:col-span-3 space-y-8">
-                <!-- SECTION RECHERCHE avec BOUTONS AVIS -->
-                <section id="recherche" class="space-y-6 fade-in">
-                    <div class="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
-                        <h2 class="text-3xl font-bold text-gray-900 dark:text-white flex-1">Rechercher des Véhicules</h2>
-                        <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-                            <input type="text" id="search-input" placeholder="Rechercher par modèle, marque..." class="flex-1 px-6 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-lg dark:bg-gray-800/80 dark:text-white transition-all duration-300 backdrop-blur-sm placeholder-gray-500" onkeyup="filterVehicules()">
-                            <select id="categorie-filter" class="px-6 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-lg dark:bg-gray-800/80 dark:text-white transition-all duration-300" onchange="filterVehicules()">
-                                <option value="">Toutes catégories</option>
-                                <option value="citadine">Citadine</option>
-                                <option value="berline">Berline</option>
-                                <option value="suv">SUV</option>
-                                <option value="utilitaire">Utilitaire</option>
-                            </select>
-                            <button onclick="clearFilters()" class="px-8 py-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-2xl transition-all duration-300">
-                                <i class="fas fa-times mr-2"></i>Réinitialiser
-                            </button>
-                        </div>
-                    </div>
+<!-- SIDEBAR -->
+<div id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg">
+    <div class="p-4 text-xl font-bold text-blue-600 border-b">🚗 MaBagnole</div>
+    <nav class="p-4 space-y-2">
+        <button onclick="showSection('dashboard')" class="w-full text-left p-2 hover:bg-blue-100 rounded">Dashboard</button>
+        <button onclick="showSection('vehicules')" class="w-full text-left p-2 hover:bg-blue-100 rounded">Véhicules</button>
+        <button onclick="showSection('categories')" class="w-full text-left p-2 hover:bg-blue-100 rounded">Catégories</button>
+        <button onclick="showSection('reservations')" class="w-full text-left p-2 hover:bg-blue-100 rounded">Réservations</button>
+        <button onclick="showSection('avis')" class="w-full text-left p-2 hover:bg-blue-100 rounded">Avis</button>
+    </nav>
+</div>
 
-                    <div class="glass rounded-3xl shadow-xl border border-white/30 dark:border-gray-700/50 p-8 backdrop-blur-xl">
-                        <div class="flex justify-between items-center mb-6">
-                            <div class="text-sm text-gray-500 dark:text-gray-400">
-                                <span id="results-count">12</span> véhicules trouvés
-                            </div>
-                            <div class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                                <button onclick="changePage(-1)" class="p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700">
-                                    <i class="fas fa-chevron-left"></i>
-                                </button>
-                                <span id="page-info">Page 1 sur 3</span>
-                                <button onclick="changePage(1)" class="p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700">
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
+<!-- CONTENT -->
+<div class="ml-64 p-6">
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="vehicules-grid"></div>
-                    </div>
-                </section>
+<h1 id="title" class="text-2xl font-bold mb-6">Dashboard</h1>
 
-                <!-- Autres sections cachées -->
-                <section id="reservations" class="hidden space-y-6 fade-in">Réservations...</section>
-                <section id="avis" class="hidden space-y-6 fade-in">Mes Avis...</section>
-            </div>
-        </div>
+<!-- DASHBOARD -->
+<section id="dashboard" class="fade-in">
+    <div class="grid grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded shadow">🚗 Véhicules : <b>12</b></div>
+        <div class="bg-white p-4 rounded shadow">📅 Réservations : <b>5</b></div>
+        <div class="bg-white p-4 rounded shadow">⭐ Avis : <b>20</b></div>
+        <div class="bg-white p-4 rounded shadow">👤 Clients : <b>8</b></div>
+    </div>
+</section>
+
+<!-- VEHICULES -->
+<section id="vehicules" class="hidden fade-in">
+    <div class="flex justify-between mb-4">
+        <h2 class="text-xl font-bold">Véhicules</h2>
+        <button onclick="openModal('vehiculeModal')" class="bg-blue-600 text-white px-4 py-2 rounded">
+            + Ajouter
+        </button>
     </div>
 
-    <!-- MODAL RÉSERVATION CORRIGÉE -->
-    <div id="reservation-modal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog">
-        <div class="flex min-h-screen items-center justify-center p-4">
-            <div class="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity" onclick="closeModal()"></div>
-            <div class="relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-2xl w-full mx-4 transform scale-95 fade-in hover:scale-100 transition-all duration-300" id="modal-content">
-                <div class="px-8 pt-8 pb-12">
-                    <div class="flex items-center justify-between mb-8">
-                        <h3 id="modal-title-resa" class="text-3xl font-bold text-gray-900 dark:text-white">Nouvelle Réservation</h3>
-                        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 p-2 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300">
-                            <i class="fas fa-times text-2xl"></i>
-                        </button>
-                    </div>
-                    <form id="reservation-form" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">Véhicule sélectionné</label>
-                                <div class="p-4 bg-blue-50 dark:bg-blue-900/30 border-2 border-blue-200 dark:border-blue-800 rounded-2xl">
-                                    <div id="selected-vehicule-info" class="font-bold text-xl text-blue-900 dark:text-blue-300">Peugeot 208 - AB-123-CD</div>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">Prix/Jour</label>
-                                <div class="p-4 bg-green-50 dark:bg-green-900/30 border-2 border-green-200 dark:border-green-800 rounded-2xl">
-                                    <div id="selected-prix" class="font-bold text-2xl text-green-900 dark:text-green-300">€45</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">Date Début *</label>
-                                <input type="date" id="date-debut" required class="w-full px-5 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-lg dark:bg-gray-700 dark:text-white transition-all duration-300">
-                            </div>
-                            <div>
-                                <label class="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">Date Fin *</label>
-                                <input type="date" id="date-fin" required class="w-full px-5 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-lg dark:bg-gray-700 dark:text-white transition-all duration-300">
-                        </div>
-                        </div>
-                        <div>
-                            <label class="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">Agence de prise en charge *</label>
-                            <select id="agence-depart" required class="w-full px-5 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-lg dark:bg-gray-700 dark:text-white">
-                                <option value="">Choisir une agence</option>
-                                <option value="paris">Paris Centre</option>
-                                <option value="marseille">Marseille</option>
-                                <option value="lyon">Lyon</option>
-                                <option value="safi">Safi (Maroc)</option>
-                            </select>
-                        </div>
-                        <div class="flex justify-end space-x-4 pt-8">
-                            <button type="button" onclick="closeModal()" class="px-10 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-2xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-300">Annuler</button>
-                            <button type="submit" class="px-10 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300">
-                                <i class="fas fa-check mr-2"></i>Confirmer Réservation
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+    <table class="w-full bg-white rounded shadow">
+        <tr class="border-b">
+            <th class="p-2">Modèle</th>
+            <th>Prix</th>
+            <th>Action</th>
+        </tr>
+        <tr>
+            <td class="p-2">Peugeot 208</td>
+            <td>45€</td>
+            <td>
+                <button onclick="confirmDelete()" class="text-red-600">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    </table>
+</section>
+
+<!-- CATEGORIES -->
+<section id="categories" class="hidden fade-in">
+    <h2 class="text-xl font-bold mb-4">Catégories</h2>
+    <div class="bg-white p-4 rounded shadow">
+        Citadine
+    </div>
+</section>
+
+<!-- RESERVATIONS -->
+<section id="reservations" class="hidden fade-in">
+    <h2 class="text-xl font-bold mb-4">Réservations</h2>
+    <div class="bg-white p-4 rounded shadow">
+        Jean Dupont - Peugeot 208
+        <button onclick="openModal('reservationModal')" class="text-blue-600 ml-4">
+            Voir
+        </button>
+    </div>
+</section>
+
+<!-- AVIS -->
+<section id="avis" class="hidden fade-in">
+    <h2 class="text-xl font-bold mb-4">Avis Clients</h2>
+    <div class="bg-white p-4 rounded shadow">
+        ⭐⭐⭐⭐⭐ Très bon service
+    </div>
+</section>
+
+</div>
+
+<!-- MODAL VEHICULE -->
+<div id="vehiculeModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded w-96">
+        <h3 class="text-xl font-bold mb-4">Ajouter Véhicule</h3>
+        <input class="border p-2 w-full mb-2" placeholder="Modèle">
+        <input class="border p-2 w-full mb-2" placeholder="Prix">
+        <div class="flex justify-end space-x-2">
+            <button onclick="closeModal('vehiculeModal')" class="px-4 py-2">Annuler</button>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded">Ajouter</button>
         </div>
     </div>
+</div>
 
-    <!-- MODAL AJOUT AVIS -->
-    <div id="avis-modal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title-avis" role="dialog">
-        <div class="flex min-h-screen items-center justify-center p-4">
-            <div class="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity" onclick="closeAvisModal()"></div>
-            <div class="relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-lg w-full mx-4 transform scale-95 fade-in hover:scale-100 transition-all duration-300">
-                <div class="px-8 pt-8 pb-12">
-                    <div class="flex items-center justify-between mb-8">
-                        <h3 id="modal-title-avis" class="text-2xl font-bold text-gray-900 dark:text-white">Ajouter un Avis</h3>
-                        <button onclick="closeAvisModal()" class="text-gray-400 hover:text-gray-600 p-2 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <i class="fas fa-times text-xl"></i>
-                        </button>
-                    </div>
-                    <form id="avis-form" class="space-y-6">
-                        <div id="avis-vehicule-info" class="p-4 bg-blue-50 dark:bg-blue-900/30 border rounded-2xl mb-6">
-                            <div class="font-bold text-lg text-blue-900 dark:text-blue-300">Peugeot 208</div>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">Note *</label>
-                            <div class="flex items-center space-x-2">
-                                <div class="flex rating-stars" id="rating-stars">
-                                    <i class="fas fa-star text-yellow-400 cursor-pointer text-2xl hover:text-yellow-500 transition-all" onclick="setRating(1)"></i>
-                                    <i class="fas fa-star text-yellow-400 cursor-pointer text-2xl hover:text-yellow-500 transition-all" onclick="setRating(2)"></i>
-                                    <i class="fas fa-star text-yellow-400 cursor-pointer text-2xl hover:text-yellow-500 transition-all" onclick="setRating(3)"></i>
-                                    <i class="fas fa-star text-yellow-400 cursor-pointer text-2xl hover:text-yellow-500 transition-all" onclick="setRating(4)"></i>
-                                    <i class="fas fa-star text-yellow-400 cursor-pointer text-2xl hover:text-yellow-500 transition-all" onclick="setRating(5)"></i>
-                                </div>
-                                <span id="rating-text" class="ml-4 text-lg font-semibold text-gray-700 dark:text-gray-300">0/5</span>
-                            </div>
-                            <input type="hidden" id="rating-value" name="note" required>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">Commentaire</label>
-                            <textarea id="commentaire" rows="4" placeholder="Dites-nous ce que vous avez pensé de ce véhicule..." 
-                                class="w-full px-5 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-lg dark:bg-gray-700 dark:text-white resize-vertical transition-all duration-300"></textarea>
-                        </div>
-                        
-                        <div class="flex justify-end space-x-4 pt-4">
-                            <button type="button" onclick="closeAvisModal()" class="px-8 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-2xl hover:bg-gray-50 transition-all duration-300">Annuler</button>
-                            <button type="submit" class="px-8 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300">
-                                <i class="fas fa-paper-plane mr-2"></i>Publier l'avis
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+<!-- MODAL RESERVATION -->
+<div id="reservationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded w-96">
+        <h3 class="text-xl font-bold mb-2">Détails Réservation</h3>
+        <p>Client : Jean Dupont</p>
+        <p>Véhicule : Peugeot 208</p>
+        <button onclick="closeModal('reservationModal')" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded">
+            Fermer
+        </button>
     </div>
+</div>
 
-    <script>
-        // Données véhicules (comme avant)
-        const vehiculesData = [
-            {id:1, modele:"Peugeot 208", marque:"Peugeot", immat:"AB-123-CD", prix:45, categorie:"citadine", disponible:true, img:"🚗"},
-            {id:2, modele:"Renault Clio", marque:"Renault", immat:"CD-456-EF", prix:42, categorie:"citadine", disponible:true, img:"🚙"},
-            {id:3, modele:"BMW X3", marque:"BMW", immat:"EF-789-GH", prix:89, categorie:"suv", disponible:false, img:"🚙"},
-            {id:4, modele:"Mercedes C180", marque:"Mercedes", immat:"GH-012-IJ", prix:67, categorie:"berline", disponible:true, img:"🚗"},
-            {id:5, modele:"Fiat Ducato", marque:"Fiat", immat:"IJ-345-KL", prix:55, categorie:"utilitaire", disponible:true, img:"🚛"},
-        ];
+<!-- JS -->
+<script>
+function showSection(id){
+    document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+    document.getElementById("title").innerText =
+        id.charAt(0).toUpperCase() + id.slice(1);
+}
 
-        let currentPage = 1, itemsPerPage = 6, filteredData = [...vehiculesData];
-        let currentVehicule = null;
+function openModal(id){
+    document.getElementById(id).classList.remove("hidden");
+}
+function closeModal(id){
+    document.getElementById(id).classList.add("hidden");
+}
+function confirmDelete(){
+    if(confirm("Supprimer cet élément ?")){
+        alert("Supprimé (demo)");
+    }
+}
+</script>
 
-        // Fonctions recherche/pagination (comme avant)
-        function filterVehicules() { /* même code que précédemment */ }
-        function displayVehicules() {
-            const start = (currentPage - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
-            const pageData = filteredData.slice(start, end);
-
-            document.getElementById('vehicules-grid').innerHTML = pageData.map(vehicule => `
-                <div class="glass rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-white/20 dark:border-gray-700/50 backdrop-blur-xl group slide-in">
-                    <div class="text-4xl mb-4">${vehicule.img}</div>
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600">${vehicule.marque} ${vehicule.modele}</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Immat: ${vehicule.immat}</p>
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="text-2xl font-bold text-green-600 dark:text-green-400">€${vehicule.prix}/jour</span>
-                        <span class="px-3 py-1 text-xs font-semibold rounded-full ${
-                            vehicule.disponible ? 'bg-green-100 dark:bg-green-900/50 text-green-800' : 'bg-red-100 dark:bg-red-900/50 text-red-800'
-                        }">${vehicule.disponible ? 'Disponible' : 'Réservé'}</span>
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-2">
-                        <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 text-xs rounded-xl">${vehicule.categorie}</span>
-                        ${vehicule.disponible ? 
-                            `<button onclick="openReservationModal(${vehicule.id}, '${vehicule.marque} ${vehicule.modele}', '${vehicule.immat}', ${vehicule.prix})" 
-                                     class="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-blue-600 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-300">
-                                <i class="fas fa-calendar-check mr-2"></i>Réserver
-                            </button>` : 
-                            `<button onclick="openAvisModal(${vehicule.id}, '${vehicule.marque} ${vehicule.modele}')" 
-                                    class="flex-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 px-4 rounded-xl font-semibold hover:from-yellow-600 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all duration-300">
-                                <i class="fas fa-star mr-2"></i>Ajouter Avis
-                            </button>`
-                        }
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // MODAL RÉSERVATION CORRIGÉE
-        function openReservationModal(id, nom, immat, prix) {
-            currentVehicule = {id, nom, immat, prix};
-            document.getElementById('selected-vehicule-info').textContent = nom + ' - ' + immat;
-            document.getElementById('selected-prix').textContent = '€' + prix;
-            document.getElementById('date-debut').value = '';
-            document.getElementById('date-fin').value = '';
-            document.getElementById('agence-depart').value = '';
-            document.getElementById('reservation-modal').classList.remove('hidden');
-        }
-
-        document.getElementById('reservation-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const debut = document.getElementById('date-debut').value;
-            const fin = document.getElementById('date-fin').value;
-            const agence = document.getElementById('agence-depart').value;
-            
-            if (new Date(debut) >= new Date(fin)) {
-                alert('La date de fin doit être postérieure à la date de début');
-                return;
-            }
-            
-            // Simulation envoi PHP: new Reservation($client, $vehicule, $debut, $fin, $agence)
-            alert(`Réservation confirmée !\nVéhicule: ${currentVehicule.nom}\nPériode: ${debut} → ${fin}\nAgence: ${agence}`);
-            closeModal();
-        });
-
-        // MODAL AVIS avec ÉTOILES
-        function openAvisModal(id, nom) {
-            currentVehicule = {id, nom};
-            document.getElementById('avis-vehicule-info').innerHTML = `<div class="font-bold text-lg text-blue-900 dark:text-blue-300">${nom}</div>`;
-            document.getElementById('rating-value').value = '';
-            document.getElementById('commentaire').value = '';
-            resetStars();
-            document.getElementById('avis-modal').classList.remove('hidden');
-        }
-
-        function setRating(value) {
-            document.getElementById('rating-value').value = value;
-            document.getElementById('rating-text').textContent = value + '/5';
-            const stars = document.querySelectorAll('#rating-stars i');
-            stars.forEach((star, index) => {
-                if (index < value) {
-                    star.classList.remove('fa-star');
-                    star.classList.add('fas', 'fa-star');
-                } else {
-                    star.classList.remove('fas', 'fa-star');
-                    star.classList.add('far', 'fa-star');
-                }
-            });
-        }
-
-        function resetStars() {
-            const stars = document.querySelectorAll('#rating-stars i');
-            stars.forEach(star => {
-                star.classList.remove('far', 'fas');
-                star.classList.add('fas', 'fa-star', 'text-yellow-400');
-            });
-            document.getElementById('rating-text').textContent = '0/5';
-        }
-
-        document.getElementById('avis-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const note = document.getElementById('rating-value').value;
-            const commentaire = document.getElementById('commentaire').value;
-            
-            if (!note) {
-                alert('Veuillez sélectionner une note');
-                return;
-            }
-            
-            // Simulation PHP: new Avis($client, $vehicule, $note, $commentaire)
-            alert(`Avis publié !\nNote: ${note}/5\nVéhicule: ${currentVehicule.nom}\nCommentaire: ${commentaire || 'Sans commentaire'}`);
-            closeAvisModal();
-        });
-
-        function closeModal() {
-            document.getElementById('reservation-modal').classList.add('hidden');
-        }
-
-        function closeAvisModal() {
-            document.getElementById('avis-modal').classList.add('hidden');
-            resetStars();
-        }
-
-        // Autres fonctions (dark mode, navigation, etc.) restent identiques
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            if (localStorage.getItem('darkMode') === 'true') {
-                document.documentElement.classList.add('dark');
-            }
-            displayVehicules();
-            showClientSection('recherche');
-        });
-
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeModal();
-                closeAvisModal();
-            }
-        });
-    </script>
 </body>
 </html>
