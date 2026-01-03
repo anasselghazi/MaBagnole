@@ -1,5 +1,6 @@
 <?php
-class Vehicule {
+class Vehicule 
+{
     private $id;
     private $modele;
     private $immatriculation;
@@ -69,11 +70,71 @@ class Vehicule {
     }
 
 
-    public static function getAllVehicules($pdo) {
-        $sql = "SELECT v.*, c.nom_categorie 
-            FROM vehicules v 
-            INNER JOIN categories c ON v.id_categorie = c.id_categorie";
-        $stmt = $pdo->query($sql);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+     public  static function listerTous()
+{     $db = new Database();
+      $pdo = $db->getPdo();
+
+    $sql = "SELECT v.*, c.nom AS categorie_nom 
+      FROM vehicules v
+      LEFT JOIN categories c ON v.id_categorie = c.id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 }
+
+
+
+ 
+ 
+
+    
+
+     public static function rechercherParModele($search) {
+        $db = new Database();
+        $pdo = $db->getPdo();
+        $sql = "SELECT v.*, c.nom AS categorie_nom 
+                FROM vehicules v LEFT JOIN categories c ON v.id_categorie = c.id 
+                WHERE v.modele LIKE ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(["%$search%"]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function filtrerParCategorie($nomCategorie) {
+        $db = new Database();
+        $pdo = $db->getPdo();
+        $sql = "SELECT v.*, c.nom AS categorie_nom 
+                FROM vehicules v LEFT JOIN categories c ON v.id_categorie = c.id 
+                WHERE c.nom LIKE ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(["%$nomCategorie%"]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function listerPagine($page=1, $parPage=5, $modele='', $categorie='') {
+        $db = new Database();
+        $pdo = $db->getPdo();
+        $offset = ($page - 1) * $parPage;
+        
+        $sql = "SELECT v.*, c.nom AS categorie_nom 
+                FROM vehicules v LEFT JOIN categories c ON v.id_categorie = c.id 
+                WHERE (:modele='' OR v.modele LIKE :modele)
+                AND (:categorie='' OR c.nom LIKE :categorie)
+                AND v.disponible = 1
+                LIMIT ? OFFSET ?";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'modele' => "%$modele%",
+            'categorie' => "%$categorie%",
+            $parPage, $offset
+        ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
+
+
+
+?>
