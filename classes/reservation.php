@@ -88,4 +88,57 @@ class Reservation {
     { 
         $this->statut = $statut; 
     }
+
+
+
+    public function creer() {
+       $db = new Database();
+       $pdo = $db->getPdo();
+
+       $sql = 'INSERT INTO reservations(id_client, id_vehicule, date_debut, date_fin, lieu_depart, lieu_retour, statut) 
+            VALUES (?,?,?,?,?,?, "en_attente")';
+       $stmt = $pdo->prepare($sql);
+    
+    $resultat = $stmt->execute([
+        $this->id_client,
+        $this->id_vehicule,
+        $this->date_debut,
+        $this->date_fin,
+        $this->lieu_depart,
+        $this->lieu_retour
+    ]);
+    
+    return $resultat;  
+   }
+
+    public static function isDisponible($pdo, $id_vehicule, $dateDebut, $dateFin) {
+        $sql = 'SELECT * FROM reservations 
+            WHERE id_vehicule = ? 
+            AND statut != "annulee"
+            AND (
+                (date_debut <= ? AND date_fin >= ?) OR
+                (date_debut >= ? AND date_fin <= ?)
+            )';
+       $stmt = $pdo->prepare($sql);
+       $stmt->execute([$id_vehicule, $dateFin, $dateDebut, $dateDebut, $dateFin]);
+       $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return !$result;  
+   }
+
+
+
+    public static function listerClient($pdo, $id_client) {
+        $sql = 'SELECT r.*, v.modele, c.nom AS categorie_nom 
+            FROM reservations r
+            JOIN vehicules v ON r.id_vehicule = v.id
+            JOIN categories c ON v.id_categorie = c.id
+            WHERE r.id_client = ? 
+            ORDER BY r.date_debut DESC';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id_client]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+
+}
+?>
