@@ -82,11 +82,9 @@ class Client {
 }
 
 
- public function verifierMotDePasse($password) {
-     
-
-    return password_verify($password, $this->mot_passe_hash);
-}
+    public function verifierMotDePasse($password) {
+        return password_verify($password, $this->mot_passe_hash);
+    }
 
 
 }

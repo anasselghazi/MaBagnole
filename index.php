@@ -14,15 +14,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $password = trim($_POST['password'] ?? '');
 
 
-    if (empty($email) || empty($password)) {
-        $logerrors[] = "Veuillez remplir tous les champs.";
-    } 
-    else {
+    // if (empty($email) || empty($password)) {
+    //     $logerrors[] = "Veuillez remplir tous les champs.";
+    // } 
+    // else {
          $client = Client::trouverParEmail($email);
+         //echo($client->getrole()== "admin");
 
          if ($client && $client->verifierMotDePasse($password)) {
             
-             $_SESSION['id_client'] = $client->getId();
+            $_SESSION['id_client'] = $client->getId();
             $_SESSION['nom'] = $client->getNom();
             $_SESSION['role'] = $client->getRole();
 
@@ -35,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         } else {
             $logerrors[] = "Email ou mot de passe incorrect.";
         }
-    }
+    // }
 }
 ?>
 
@@ -181,7 +182,7 @@ body {
     </div>
 <?php endif; ?>
 
-   <form id="loginForm" method="POST" action="index.php">
+   <form id="loginForm" method="POST" action="#">
   <div class="space-y-4">
     <div>
       <label class="block text-sm font-medium text-gray-400 mb-1">Email Address</label>
