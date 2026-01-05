@@ -111,7 +111,11 @@ class Reservation {
     return $resultat;  
    }
 
-    public static function isDisponible($pdo, $id_vehicule, $dateDebut, $dateFin) {
+    public static function isDisponible( $id_vehicule, $dateDebut, $dateFin) {
+        
+        $db = new database();
+       $pdo = $db->getPdo();
+        
         $sql = 'SELECT * FROM reservations 
             WHERE id_vehicule = ? 
             AND statut != "annulee"
@@ -127,7 +131,9 @@ class Reservation {
 
 
 
-    public static function listerClient($pdo, $id_client) {
+    public static function listerClient($id_client) {
+        $db = new database();
+        $pdo = $db->getPdo();
         $sql = 'SELECT r.*, v.modele, c.nom AS categorie_nom 
             FROM reservations r
             JOIN vehicules v ON r.id_vehicule = v.id
